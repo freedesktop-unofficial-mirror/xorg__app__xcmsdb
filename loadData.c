@@ -31,7 +31,7 @@
  *
  *
  */
-/* $XFree86$ */
+/* $XFree86: xc/programs/xcmsdb/loadData.c,v 3.4 2003/09/24 02:43:38 dawes Exp $ */
 
 /*
  *      INCLUDES
