@@ -28,6 +28,7 @@
  *		X Device Color Characterization Convention (XDCCC).
  *
  */
+/* $XFree86: xc/programs/xcmsdb/SCCDFile.h,v 1.4 2001/01/17 23:45:19 dawes Exp $ */
 #ifndef SCCDFILE_H
 #define SCCDFILE_H
 
@@ -138,5 +139,7 @@ typedef struct _XDCCC_Correction {
     struct _XDCCC_Correction*	next;
 } XDCCC_Correction;
 
+extern int LoadSCCData(Display *pDpy, int screenNumber, char *filename, 
+		       int targetFormat);
 
 #endif /* SCCDFILE_H */

@@ -23,7 +23,10 @@
 .\" be used in advertising or otherwise to promote the sale, use or other 
 .\" dealing in this Software without prior written authorization from the 
 .\" The Open Group.
-.TH XCMSDB 1 "Release 6.4" "X Version 11"
+.\"
+.\" $XFree86: xc/programs/xcmsdb/xcmsdb.man,v 1.7 2001/12/14 20:01:18 dawes Exp $
+.\"
+.TH XCMSDB 1 __xorgversion__
 .SH NAME
 xcmsdb \- Device Color Characterization utility for X Color Management System
 .SH SYNOPSIS
