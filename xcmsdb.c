@@ -29,12 +29,14 @@
  *		Characterization Data from the root window of the screen.
  *
  */
+/* $XFree86: xc/programs/xcmsdb/xcmsdb.c,v 1.6 2001/04/01 14:00:19 tsi Exp $ */
 
 /*
  *      INCLUDES
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xos.h>
@@ -42,12 +44,19 @@
 
 #include "SCCDFile.h"
 
-static unsigned long _XcmsGetElement();
-static int _XcmsGetProperty();
+static void QuerySCCDataRGB(Display *dpy, Window root);
+static void RemoveSCCData(Display *dpy, Window root, int colorFlag);
+static unsigned long _XcmsGetElement(int format, char **pValue, 
+				     unsigned long *pCount);
+static int _XcmsGetProperty(Display *pDpy, Window w, Atom property, 
+			    int *pFormat, unsigned long *pNItems, 
+			    unsigned long *pNBytes, char **pValue);
+
 
 char *ProgramName;
 
-void Syntax ()
+static void
+Syntax (void)
 {
     fprintf (stderr, 
 	     "usage:  %s [-options ...] [filename]\n\n",
@@ -73,10 +82,8 @@ void Syntax ()
     exit (1);
 }
 
-static Bool optionmatch (opt, arg, minlen)
-    char *opt;
-    char *arg;
-    int minlen;
+static Bool 
+optionmatch(char *opt, char *arg, int minlen)
 {
     int arglen;
 
@@ -95,9 +102,8 @@ static Bool optionmatch (opt, arg, minlen)
     return(False);
 }
 
-main (argc, argv)
-    int argc;
-    char **argv;
+int
+main(int argc, char *argv[])
 {
     Display *dpy;
     int i;
@@ -190,11 +196,8 @@ main (argc, argv)
 }
 
 
-Atom
-ParseAtom (dpy, name, only_flag)
-    Display *dpy;
-    char    *name;
-    int     only_flag;
+static Atom
+ParseAtom(Display *dpy, char *name, int only_flag)
 {
     return(XInternAtom(dpy, name, only_flag));
 }
@@ -207,10 +210,7 @@ ParseAtom (dpy, name, only_flag)
  *	SYNOPSIS
  */
 static void
-PrintTableType0(format, pChar, pCount)
-    int	  format;
-    char **pChar;
-    unsigned long *pCount;
+PrintTableType0(int format, char **pChar, unsigned long *pCount)
 /*
  *	DESCRIPTION
  *
@@ -234,7 +234,7 @@ PrintTableType0(format, pChar, pCount)
 	    hValue = _XcmsGetElement (format, pChar, pCount) * 0x101;
 	    fValue = _XcmsGetElement (format, pChar, pCount)
 		    / (XcmsFloat)255.0;
-	    printf ("\t\t0x%x\t%8.5lf\n", hValue, fValue);
+	    printf ("\t\t0x%x\t%8.5f\n", hValue, fValue);
 	}
 	break;
       case 16:
@@ -242,7 +242,7 @@ PrintTableType0(format, pChar, pCount)
 	    hValue = _XcmsGetElement (format, pChar, pCount);
 	    fValue = _XcmsGetElement (format, pChar, pCount)
 		    / (XcmsFloat)65535.0;
-	    printf ("\t\t0x%x\t%8.5lf\n", hValue, fValue);
+	    printf ("\t\t0x%x\t%8.5f\n", hValue, fValue);
 	}
 	break;
       case 32:
@@ -250,7 +250,7 @@ PrintTableType0(format, pChar, pCount)
 	    hValue = _XcmsGetElement (format, pChar, pCount);
 	    fValue = _XcmsGetElement (format, pChar, pCount)
 		    / (XcmsFloat)4294967295.0;
-	    printf ("\t\t0x%x\t%8.5lf\n", hValue, fValue);
+	    printf ("\t\t0x%x\t%8.5f\n", hValue, fValue);
 	}
 	break;
       default:
@@ -266,10 +266,7 @@ PrintTableType0(format, pChar, pCount)
  *	SYNOPSIS
  */
 static void
-PrintTableType1(format, pChar, pCount)
-    int	  format;
-    char **pChar;
-    unsigned long *pCount;
+PrintTableType1(int format, char **pChar, unsigned long *pCount)
 /*
  *	DESCRIPTION
  *
@@ -293,7 +290,7 @@ PrintTableType1(format, pChar, pCount)
 	    hValue = (count * 65535) / max_index;
 	    fValue = _XcmsGetElement (format, pChar, pCount)
 		    / (XcmsFloat)255.0;
-	    printf ("\t\t0x%x\t%8.5lf\n", hValue, fValue);
+	    printf ("\t\t0x%x\t%8.5f\n", hValue, fValue);
 	}
 	break;
       case 16:
@@ -301,7 +298,7 @@ PrintTableType1(format, pChar, pCount)
 	    hValue = (count * 65535) / max_index;
 	    fValue = _XcmsGetElement (format, pChar, pCount)
 		    / (XcmsFloat)65535.0;
-	    printf ("\t\t0x%x\t%8.5lf\n", hValue, fValue);
+	    printf ("\t\t0x%x\t%8.5f\n", hValue, fValue);
 	}
 	break;
       case 32:
@@ -309,7 +306,7 @@ PrintTableType1(format, pChar, pCount)
 	    hValue = (count * 65535) / max_index;
 	    fValue = _XcmsGetElement (format, pChar, pCount)
 		    / (XcmsFloat)4294967295.0;
-	    printf ("\t\t0x%x\t%8.5lf\n", hValue, fValue);
+	    printf ("\t\t0x%x\t%8.5f\n", hValue, fValue);
 	}
 	break;
       default:
@@ -324,10 +321,8 @@ PrintTableType1(format, pChar, pCount)
  *
  *      SYNOPSIS
  */
-int
-QuerySCCDataRGB(dpy, root)
-    Display *dpy;
-    Window  root;
+static void
+QuerySCCDataRGB(Display *dpy, Window root)
 /*
  *      DESCRIPTION
  *
@@ -361,7 +356,7 @@ QuerySCCDataRGB(dpy, root)
 			  &nbytes_return, &property_return) == XcmsFailure) {
 	    format = 0;
 	} else if (nitems != 18) {
-	    printf ("Property %s had invalid length of %d\n",
+	    printf ("Property %s had invalid length of %ld\n",
 		    XDCCC_MATRIX_ATOM_NAME, nitems);
 	    if (property_return) {
 		XFree (property_return);
@@ -382,7 +377,7 @@ QuerySCCDataRGB(dpy, root)
 	for (i = 0; i < 3; i++) {
 	    printf ("\t");
 	    for (j = 0; j < 3; j++) {
-		printf ("\t%8.5lf", 
+		printf ("\t%8.5f", 
 			(long)_XcmsGetElement(format, &pChar, &nitems)
 			/ (XcmsFloat) XDCCC_NUMBER);
 	    }
@@ -392,7 +387,7 @@ QuerySCCDataRGB(dpy, root)
 	for (i = 0; i < 3; i++) {
 	    printf ("\t");
 	    for (j = 0; j < 3; j++) {
-		printf ("\t%8.5lf", 
+		printf ("\t%8.5f", 
 			(long) _XcmsGetElement(format, &pChar, &nitems)
 			/ (XcmsFloat) XDCCC_NUMBER);
 	    }
@@ -411,7 +406,7 @@ QuerySCCDataRGB(dpy, root)
 			  &nbytes_return, &property_return) == XcmsFailure) {
 	    format = 0;
 	} else if (nitems <= 0) {
-            printf ("Property %s had invalid length of %d\n",
+            printf ("Property %s had invalid length of %ld\n",
 		    XDCCC_CORRECT_ATOM_NAME, nitems);
 	    if (property_return) {
 		XFree (property_return);
@@ -553,9 +548,7 @@ IntensityTblError:
  *      SYNOPSIS
  */
 int
-QuerySCCDataGray(dpy, root)
-    Display *dpy;
-    Window  root;
+QuerySCCDataGray(Display *dpy, Window root)
 /*
  *      DESCRIPTION
  *
@@ -716,11 +709,8 @@ IntensityTblError:
  *
  *      SYNOPSIS
  */
-int
-RemoveSCCData(dpy, root, colorFlag)
-    Display *dpy;
-    Window  root;
-    int     colorFlag;
+static void
+RemoveSCCData(Display *dpy, Window root, int colorFlag)
 /*
  *      DESCRIPTION
  *
@@ -796,10 +786,7 @@ RemoveSCCData(dpy, root, colorFlag)
 }
 
 static unsigned long
-_XcmsGetElement (format, pValue, pCount) 
-    int             format;
-    char            **pValue;
-    unsigned long   *pCount;
+_XcmsGetElement(int format, char **pValue, unsigned long *pCount) 
 /*
  *	DESCRIPTION
  *	    Get the next element from the property and return it.
@@ -842,14 +829,9 @@ _XcmsGetElement (format, pValue, pCount)
  *	SYNOPSIS
  */
 static int
-_XcmsGetProperty (pDpy, w, property, pFormat, pNItems, pNBytes, pValue) 
-    Display *pDpy;
-    Window  w;
-    Atom property;
-    int             *pFormat;
-    unsigned long   *pNItems;
-    unsigned long   *pNBytes;
-    char            **pValue;
+_XcmsGetProperty(Display *pDpy, Window w, Atom property, int *pFormat, 
+		 unsigned long *pNItems, unsigned long *pNBytes, 
+		 char **pValue) 
 /*
  *	DESCRIPTION
  *
