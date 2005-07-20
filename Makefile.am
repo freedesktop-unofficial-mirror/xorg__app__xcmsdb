@@ -21,8 +21,8 @@
 
 bin_PROGRAMS = xcmsdb
 
-xcmsdb_CFLAGS = $(DEP_CFLAGS)
-xcmsdb_LDADD = $(DEP_LIBS)
+xcmsdb_CFLAGS = $(XCMSDB_CFLAGS)
+xcmsdb_LDADD = $(XCMSDB_LIBS)
 
 xcmsdb_SOURCES =	\
         loadData.c \
