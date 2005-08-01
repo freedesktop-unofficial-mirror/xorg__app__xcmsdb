@@ -29,7 +29,7 @@ xcmsdb_SOURCES =	\
         SCCDFile.h \
         xcmsdb.c
 
-dist_man_MANS = \
+dist_man1_MANS = \
         xcmsdb.man
 
 EXTRA_DIST = datafiles/sample1.dcc datafiles/sample2.dcc
