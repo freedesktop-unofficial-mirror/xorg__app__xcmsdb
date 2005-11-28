@@ -34,7 +34,7 @@ appman_SOURCES = \
 
 EXTRA_DIST = datafiles/sample1.dcc datafiles/sample2.dcc
 
-appmandir =  $(mandir)/man$(APP_MAN_SUFFIX)
+appmandir = $(APP_MAN_DIR)
 
 appman_DATA = $(appman_SOURCES:man=@APP_MAN_SUFFIX@)
 
