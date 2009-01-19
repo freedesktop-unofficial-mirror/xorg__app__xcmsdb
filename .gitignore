@@ -18,3 +18,7 @@ stamp-h1
 xcmsdb
 xcmsdb.1
 *~
+*.o
+xcmsdb-*.tar.*
+ChangeLog
+tags
