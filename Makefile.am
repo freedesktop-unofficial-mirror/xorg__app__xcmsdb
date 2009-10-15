@@ -21,7 +21,7 @@
 
 bin_PROGRAMS = xcmsdb
 
-AM_CFLAGS = $(XCMSDB_CFLAGS)
+AM_CFLAGS = $(CWARNFLAGS) $(XCMSDB_CFLAGS)
 xcmsdb_LDADD = $(XCMSDB_LIBS)
 
 xcmsdb_SOURCES =	\
@@ -63,7 +63,7 @@ MAN_SUBSTS = \
 SUFFIXES = .$(APP_MAN_SUFFIX) .man
 
 .man.$(APP_MAN_SUFFIX):
-	sed $(MAN_SUBSTS) < $< > $@
+	$(AM_V_GEN)$(SED) $(MAN_SUBSTS) < $< > $@
 
 EXTRA_DIST += ChangeLog
 MAINTAINERCLEANFILES = ChangeLog
