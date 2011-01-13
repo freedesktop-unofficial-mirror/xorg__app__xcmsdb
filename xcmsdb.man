@@ -86,7 +86,7 @@ Precision of encoded floating point values increases with the increase
 in bits per entry.
 The default is 32 bits per entry.
 .SH "SEE ALSO"
-xprop(1), Xlib documentation
+xprop(__appmansuffix__), Xlib documentation
 .SH ENVIRONMENT
 .TP 8
 .B DISPLAY
