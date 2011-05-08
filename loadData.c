@@ -634,6 +634,11 @@ ProcessIProfile(FILE *stream, XDCCC_Correction *pCorrection)
 		state = 0;
 		break;
 	      case DATA :
+		if(pIRec == NULL) {
+		    fprintf(stderr, "Line %d: Invalid Intensity Profile -- Premature %s\n",
+		            linenum, keyword);
+		    return (0);
+		}
 		do {
 		    /********************************************************
 		     * Note: tableType should only be 0 or 1 at this point. 
