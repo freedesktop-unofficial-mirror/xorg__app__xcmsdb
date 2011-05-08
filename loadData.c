@@ -1494,7 +1494,6 @@ LoadSCCData(Display *pDpy, int screenNumber, char *filename, int targetFormat)
     }
 
     while ((pStr = nextline(buf, BUFSIZ, stream)) != NULL) {
-	token1 = token2 = token3 = (char*)NULL;
 	keyword = strtok(buf, DATA_DELIMS);
 	if (keyword != (char*)NULL) {
 	    switch (SCKeyOf(keyword)) {
