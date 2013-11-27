@@ -62,7 +62,7 @@
  */
 
 typedef struct _DefineEntry {
-    char	*pString;
+    const char	*pString;
     int		define;
 } DefineEntry;
 
@@ -151,7 +151,7 @@ static DefineEntry VisualClassTbl[] = {
 static int
 StrToDefine(DefineEntry pde[],	/* IN: table of X string-define pairs     */
 				/*     last entry must contain pair "", 0 */
-	    char *pstring)	/* IN: string to be looked up in that table */
+	   const char *pstring)	/* IN: string to be looked up in that table */
 /*
  *	DESCRIPTION
  *		Converts a string to an integer define.
@@ -184,7 +184,7 @@ StrToDefine(DefineEntry pde[],	/* IN: table of X string-define pairs     */
  *
  *	SYNOPSIS
  */
-static char *
+static const char *
 DefineToStr(DefineEntry pde[],	/* IN: table of X string-define pairs */
 				/*     last entry must contain pair "", 0 */
 	    int id)		/* IN: id to be looked up in that table	*/
@@ -221,7 +221,7 @@ DefineToStr(DefineEntry pde[],	/* IN: table of X string-define pairs */
  *	SYNOPSIS
  */
 static int
-SCKeyOf(char *string)
+SCKeyOf(const char *string)
 /*
  *	DESCRIPTION
  *		Converts a string to an integer define.
@@ -250,7 +250,7 @@ SCKeyOf(char *string)
  *	SYNOPSIS
  */
 static int
-SCScrnClassOf(char *string)
+SCScrnClassOf(const char *string)
 /*
  *	DESCRIPTION
  *		Converts a string to an integer define.
@@ -278,7 +278,7 @@ SCScrnClassOf(char *string)
  *
  *	SYNOPSIS
  */
-static char *
+static const char *
 SCScrnClassStringOf(int id)
 /*
  *	DESCRIPTION
@@ -1417,7 +1417,8 @@ ParseVisualOptions(Display *pDpy, XDCCC_Correction *pCorrection, char *pbuf)
  *	SYNOPSIS
  */
 int
-LoadSCCData(Display *pDpy, int screenNumber, char *filename, int targetFormat)
+LoadSCCData(Display *pDpy, int screenNumber, const char *filename,
+            int targetFormat)
 
 /*
  *	DESCRIPTION

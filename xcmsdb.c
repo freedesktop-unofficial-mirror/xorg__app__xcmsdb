@@ -87,7 +87,7 @@ MissingArg (const char *option)
 }
 
 static Bool 
-optionmatch(char *opt, char *arg, int minlen)
+optionmatch(const char *opt, const char *arg, int minlen)
 {
     int arglen;
 
@@ -207,7 +207,7 @@ main(int argc, char *argv[])
 
 
 static Atom
-ParseAtom(Display *dpy, char *name, int only_flag)
+ParseAtom(Display *dpy, const char *name, int only_flag)
 {
     return(XInternAtom(dpy, name, only_flag));
 }
@@ -348,7 +348,7 @@ QuerySCCDataRGB(Display *dpy, Window root)
     VisualID visualID;
     XVisualInfo vinfo_template, *vinfo_ret;
     int nvis;
-    static char *visual_strings[] = {
+    static const char *visual_strings[] = {
 	"StaticGray",
 	"GrayScale",
 	"StaticColor",
