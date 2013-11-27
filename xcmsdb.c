@@ -56,7 +56,7 @@ static int _XcmsGetProperty(Display *pDpy, Window w, Atom property,
 static char *ProgramName;
 
 static void
-Syntax (void)
+Syntax (int exitcode)
 {
     fprintf (stderr, 
 	     "usage:  %s [-options ...] [filename]\n\n%s",
@@ -71,7 +71,14 @@ Syntax (void)
 	     "    -gray                        use gray-scale as default\n");
 #endif /* GRAY */
 	     "\n");
-    exit (1);
+    exit (exitcode);
+}
+
+static void
+MissingArg (const char *option)
+{
+    fprintf (stderr, "%s: %s requires an argument\n", ProgramName, option);
+    Syntax (1);
 }
 
 static Bool 
@@ -117,17 +124,21 @@ main(int argc, char *argv[])
 		filename = NULL;
 		continue;
 	    } else if (optionmatch ("-help", arg, 1)) {
-		Syntax ();
+		Syntax (0);
 		/* doesn't return */
 	    } else if (optionmatch ("-display", arg, 1)) {
-		if (++i >= argc) Syntax ();
+		if (++i >= argc) MissingArg ("-display");
 		displayname = argv[i];
 		continue;
 	    } else if (optionmatch ("-format", arg, 1)) {
-		if (++i >= argc) Syntax ();
+		if (++i >= argc) MissingArg ("-format");
 		targetFormat = atoi(argv[i]);
 		if (targetFormat != 32 && targetFormat != 16 &&
-			targetFormat != 8) Syntax();
+			targetFormat != 8) {
+		    fprintf (stderr, "%s: invalid value for -format: %d\n",
+			     ProgramName, targetFormat);
+		    Syntax (1);
+		}
 		continue;
 	    } else if (optionmatch ("-query", arg, 1)) {
 		query = 1;
@@ -144,7 +155,9 @@ main(int argc, char *argv[])
 		continue;
 #endif /* GRAY */
 	    }
-	    Syntax ();
+	    fprintf (stderr, "%s: unrecognized option '%s'\n",
+		     ProgramName, arg);
+	    Syntax (1);
 	} else {
 	    load = 1;
 	    filename = arg;
