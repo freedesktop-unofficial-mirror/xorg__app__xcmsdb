@@ -59,25 +59,17 @@ static void
 Syntax (void)
 {
     fprintf (stderr, 
-	     "usage:  %s [-options ...] [filename]\n\n",
-	     ProgramName);
-    fprintf (stderr, 
-	     "where options include:\n");
-    fprintf (stderr, 
-	     "    -display host:dpy[.scrn]     display to use\n");
-    fprintf (stderr, 
-	     "    -format [ 32 | 16 | 8 ]      property format\n");
-    fprintf (stderr, 
-	     "    -query                       query Screen Color Characterization Data\n");
-    fprintf (stderr, 
-	     "    -remove                      remove Screen Color Characterization Data\n");
+	     "usage:  %s [-options ...] [filename]\n\n%s",
+	     ProgramName,
+	     "where options include:\n"
+	     "    -display host:dpy[.scrn]     display to use\n"
+	     "    -format [ 32 | 16 | 8 ]      property format\n"
+	     "    -query                       query Screen Color Characterization Data\n"
+	     "    -remove                      remove Screen Color Characterization Data\n"
 #ifdef GRAY
-    fprintf (stderr, 
 	     "    -color                       use color as default\n");
-    fprintf (stderr, 
 	     "    -gray                        use gray-scale as default\n");
 #endif /* GRAY */
-    fprintf (stderr, 
 	     "\n");
     exit (1);
 }
