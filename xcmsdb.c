@@ -35,6 +35,10 @@
  *      INCLUDES
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <X11/Xlib.h>
@@ -70,6 +74,7 @@ Syntax (int exitcode)
 	     "    -color                       use color as default\n");
 	     "    -gray                        use gray-scale as default\n");
 #endif /* GRAY */
+	     "    -version                     print program version\n"
 	     "\n");
     exit (exitcode);
 }
@@ -154,6 +159,9 @@ main(int argc, char *argv[])
 		color = 0;
 		continue;
 #endif /* GRAY */
+	    } else if (optionmatch ("-version", arg, 1)) {
+		puts (PACKAGE_STRING);
+		exit (0);
 	    }
 	    fprintf (stderr, "%s: unrecognized option '%s'\n",
 		     ProgramName, arg);
