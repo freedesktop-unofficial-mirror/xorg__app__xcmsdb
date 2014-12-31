@@ -71,9 +71,9 @@ core
 *.tar.bz2
 *.tar.gz
 #
-#		Add & Override patterns for xcmsdb 
+#		Add & Override patterns for xcmsdb
 #
 #		Edit the following section as needed
 # For example, !report.pc overrides *.pc. See 'man gitignore'
-# 
+#
 xcmsdb

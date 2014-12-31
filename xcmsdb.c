@@ -25,7 +25,7 @@
  *		xcmsdb.c
  *
  *	DESCRIPTION
- *		Program to load, query or remove the Screen Color 
+ *		Program to load, query or remove the Screen Color
  *		Characterization Data from the root window of the screen.
  *
  */
@@ -50,10 +50,10 @@
 
 static void QuerySCCDataRGB(Display *dpy, Window root);
 static void RemoveSCCData(Display *dpy, Window root, int colorFlag);
-static unsigned long _XcmsGetElement(int format, char **pValue, 
+static unsigned long _XcmsGetElement(int format, char **pValue,
 				     unsigned long *pCount);
-static int _XcmsGetProperty(Display *pDpy, Window w, Atom property, 
-			    int *pFormat, unsigned long *pNItems, 
+static int _XcmsGetProperty(Display *pDpy, Window w, Atom property,
+			    int *pFormat, unsigned long *pNItems,
 			    unsigned long *pNBytes, char **pValue);
 
 
@@ -62,7 +62,7 @@ static char *ProgramName;
 static void
 Syntax (int exitcode)
 {
-    fprintf (stderr, 
+    fprintf (stderr,
 	     "usage:  %s [-options ...] [filename]\n\n%s",
 	     ProgramName,
 	     "where options include:\n"
@@ -86,7 +86,7 @@ MissingArg (const char *option)
     Syntax (1);
 }
 
-static Bool 
+static Bool
 optionmatch(const char *opt, const char *arg, int minlen)
 {
     int arglen;
@@ -102,7 +102,7 @@ optionmatch(const char *opt, const char *arg, int minlen)
     if (strncmp (opt, arg, arglen) == 0) {
 	return(True);
     }
-    
+
     return(False);
 }
 
@@ -172,7 +172,7 @@ main(int argc, char *argv[])
 	}
     }
 
-    /* Open display  */ 
+    /* Open display  */
     if (!(dpy = XOpenDisplay (displayname))) {
       fprintf (stderr, "%s:  Can't open display '%s'\n",
 	       ProgramName, XDisplayName(displayname));
@@ -373,7 +373,7 @@ QuerySCCDataRGB(Display *dpy, Window root)
 	    }
 	    return;
 	}
-    } 
+    }
     if (MatricesAtom == None || !format) {
 	printf ("Could not find property %s\n", XDCCC_MATRIX_ATOM_NAME);
     } else if (format != 32) {
@@ -387,7 +387,7 @@ QuerySCCDataRGB(Display *dpy, Window root)
 	for (i = 0; i < 3; i++) {
 	    printf ("\t");
 	    for (j = 0; j < 3; j++) {
-		printf ("\t%8.5f", 
+		printf ("\t%8.5f",
 			(long)_XcmsGetElement(format, &pChar, &nitems)
 			/ (XcmsFloat) XDCCC_NUMBER);
 	    }
@@ -397,7 +397,7 @@ QuerySCCDataRGB(Display *dpy, Window root)
 	for (i = 0; i < 3; i++) {
 	    printf ("\t");
 	    for (j = 0; j < 3; j++) {
-		printf ("\t%8.5f", 
+		printf ("\t%8.5f",
 			(long) _XcmsGetElement(format, &pChar, &nitems)
 			/ (XcmsFloat) XDCCC_NUMBER);
 	    }
@@ -491,7 +491,7 @@ QuerySCCDataRGB(Display *dpy, Window root)
 	    visualID = _XcmsGetElement(format, &pChar, &nitems);
 	    /* add the depth, class, and bits info in output */
 	    vinfo_template.visualid = visualID;
-	    vinfo_ret = XGetVisualInfo(dpy, VisualIDMask, &vinfo_template, 
+	    vinfo_ret = XGetVisualInfo(dpy, VisualIDMask, &vinfo_template,
 				       &nvis);
 	    while (count--) {
 		visualID = visualID << format;
@@ -499,7 +499,7 @@ QuerySCCDataRGB(Display *dpy, Window root)
 	    }
 
 	    if (vinfo_ret != NULL) {
-		printf 
+		printf
 		 ("\n\tVisualID: 0x%lx class: %s depth: %d bits_per_rgb: %d\n",
 		  visualID, visual_strings[vinfo_ret->class],
 		  vinfo_ret->depth, vinfo_ret->bits_per_rgb);
@@ -538,9 +538,9 @@ QuerySCCDataRGB(Display *dpy, Window root)
 	      default:
 		goto IntensityTblError;
 	    }
-	}    
+	}
 	XFree (property_return);
-    }    
+    }
     return;
 
 IntensityTblError:
@@ -586,7 +586,7 @@ QuerySCCDataGray(Display *dpy, Window root)
 	    }
 	    return;
 	}
-    } 
+    }
     if (MatricesAtom == None || !format) {
 	printf ("Could not find property %s\n", XDCCC_SCREENWHITEPT_ATOM_NAME);
     } else {
@@ -595,8 +595,8 @@ QuerySCCDataGray(Display *dpy, Window root)
 	printf ("\tWhite Point XYZ :\n");
 	printf ("\t");
 	for (j = 0; j < 3; j++) {
-	    printf ("\t%8.5lf", 
-			(long) _XcmsGetElement(format, &pChar, &nitems) / 
+	    printf ("\t%8.5lf",
+			(long) _XcmsGetElement(format, &pChar, &nitems) /
 			(XcmsFloat) XDCCC_NUMBER);
 	}
 	printf ("\n");
@@ -702,9 +702,9 @@ QuerySCCDataGray(Display *dpy, Window root)
 	      default:
 		goto IntensityTblError;
 	    }
-	}    
+	}
 	XFree (property_return);
-    }    
+    }
     return;
 IntensityTblError:
     XFree (property_return);
@@ -737,9 +737,9 @@ RemoveSCCData(Display *dpy, Window root, int colorFlag)
 	MatricesAtom = ParseAtom (dpy, XDCCC_MATRIX_ATOM_NAME, True);
 	if (MatricesAtom != None) {
 	    XGetWindowProperty (dpy, root, MatricesAtom, 0, 8192, False,
-			XA_INTEGER, &ret_atom, &ret_format, &ret_len, 
+			XA_INTEGER, &ret_atom, &ret_format, &ret_len,
 			&ret_after, &ret_prop);
-	} 
+	}
 	if (MatricesAtom == None || !ret_format) {
 	    printf ("Could not find property %s\n", XDCCC_MATRIX_ATOM_NAME);
 	} else {
@@ -750,8 +750,8 @@ RemoveSCCData(Display *dpy, Window root, int colorFlag)
 
 	CorrectAtom = XInternAtom (dpy, XDCCC_CORRECT_ATOM_NAME, True);
 	if (CorrectAtom != None) {
-	    XGetWindowProperty (dpy, root, CorrectAtom, 0, 8192, False, 
-			XA_INTEGER, &ret_atom, &ret_format, &ret_len, 
+	    XGetWindowProperty (dpy, root, CorrectAtom, 0, 8192, False,
+			XA_INTEGER, &ret_atom, &ret_format, &ret_len,
 			&ret_after, &ret_prop);
 	}
 	if (CorrectAtom == None || !ret_format) {
@@ -767,9 +767,9 @@ RemoveSCCData(Display *dpy, Window root, int colorFlag)
 	MatricesAtom = ParseAtom (dpy, XDCCC_SCREENWHITEPT_ATOM_NAME, True);
 	if (MatricesAtom != None) {
 	    XGetWindowProperty (dpy, root, MatricesAtom, 0, 8192, False,
-			XA_INTEGER, &ret_atom, &ret_format, &ret_len, 
+			XA_INTEGER, &ret_atom, &ret_format, &ret_len,
 			&ret_after, &ret_prop);
-	} 
+	}
 	if (MatricesAtom == None || !ret_format) {
 	    printf ("Could not find property %s\n", XDCCC_SCREENWHITEPT_ATOM_NAME);
 	} else {
@@ -780,8 +780,8 @@ RemoveSCCData(Display *dpy, Window root, int colorFlag)
 
 	CorrectAtom = XInternAtom (dpy, XDCCC_GRAY_CORRECT_ATOM_NAME, True);
 	if (CorrectAtom != None) {
-	    XGetWindowProperty (dpy, root, CorrectAtom, 0, 8192, False, 
-			XA_INTEGER, &ret_atom, &ret_format, &ret_len, 
+	    XGetWindowProperty (dpy, root, CorrectAtom, 0, 8192, False,
+			XA_INTEGER, &ret_atom, &ret_format, &ret_len,
 			&ret_after, &ret_prop);
 	}
 	if (CorrectAtom == None || !ret_format) {
@@ -796,7 +796,7 @@ RemoveSCCData(Display *dpy, Window root, int colorFlag)
 }
 
 static unsigned long
-_XcmsGetElement(int format, char **pValue, unsigned long *pCount) 
+_XcmsGetElement(int format, char **pValue, unsigned long *pCount)
 /*
  *	DESCRIPTION
  *	    Get the next element from the property and return it.
@@ -839,9 +839,9 @@ _XcmsGetElement(int format, char **pValue, unsigned long *pCount)
  *	SYNOPSIS
  */
 static int
-_XcmsGetProperty(Display *pDpy, Window w, Atom property, int *pFormat, 
-		 unsigned long *pNItems, unsigned long *pNBytes, 
-		 char **pValue) 
+_XcmsGetProperty(Display *pDpy, Window w, Atom property, int *pFormat,
+		 unsigned long *pNItems, unsigned long *pNBytes,
+		 char **pValue)
 /*
  *	DESCRIPTION
  *
@@ -855,10 +855,10 @@ _XcmsGetProperty(Display *pDpy, Window w, Atom property, int *pFormat,
     long len = 6516;
     unsigned long nitems_ret, after_ret;
     Atom atom_ret;
-    
-    while (XGetWindowProperty (pDpy, w, property, 0, len, False, 
-			       XA_INTEGER, &atom_ret, &format_ret, 
-			       &nitems_ret, &after_ret, 
+
+    while (XGetWindowProperty (pDpy, w, property, 0, len, False,
+			       XA_INTEGER, &atom_ret, &format_ret,
+			       &nitems_ret, &after_ret,
 			       (unsigned char **)&prop_ret)) {
 	if (after_ret > 0) {
 	    len += nitems_ret * (format_ret >> 3);
@@ -867,7 +867,7 @@ _XcmsGetProperty(Display *pDpy, Window w, Atom property, int *pFormat,
 	    break;
 	}
     }
-    if (format_ret == 0 || nitems_ret == 0) { 
+    if (format_ret == 0 || nitems_ret == 0) {
 	/* the property does not exist or is of an unexpected type */
 	return(XcmsFailure);
     }
