@@ -730,17 +730,17 @@ RemoveSCCData(Display *dpy, Window root, int colorFlag)
 {
     unsigned char *ret_prop;
     unsigned long ret_len, ret_after;
-    int  ret_format;
+    int  ret_format, status = -1;
     Atom MatricesAtom, CorrectAtom, ret_atom;
 
     if (colorFlag != 0) {
 	MatricesAtom = ParseAtom (dpy, XDCCC_MATRIX_ATOM_NAME, True);
 	if (MatricesAtom != None) {
-	    XGetWindowProperty (dpy, root, MatricesAtom, 0, 8192, False,
-			XA_INTEGER, &ret_atom, &ret_format, &ret_len,
+	    status = XGetWindowProperty (dpy, root, MatricesAtom, 0, 8192,
+			False, XA_INTEGER, &ret_atom, &ret_format, &ret_len,
 			&ret_after, &ret_prop);
 	}
-	if (MatricesAtom == None || !ret_format) {
+	if (MatricesAtom == None || status != Success || !ret_format) {
 	    printf ("Could not find property %s\n", XDCCC_MATRIX_ATOM_NAME);
 	} else {
 	    printf ("Deleting property %s\n", XDCCC_MATRIX_ATOM_NAME);
@@ -750,11 +750,11 @@ RemoveSCCData(Display *dpy, Window root, int colorFlag)
 
 	CorrectAtom = XInternAtom (dpy, XDCCC_CORRECT_ATOM_NAME, True);
 	if (CorrectAtom != None) {
-	    XGetWindowProperty (dpy, root, CorrectAtom, 0, 8192, False,
-			XA_INTEGER, &ret_atom, &ret_format, &ret_len,
+	    status = XGetWindowProperty (dpy, root, CorrectAtom, 0, 8192,
+			False, XA_INTEGER, &ret_atom, &ret_format, &ret_len,
 			&ret_after, &ret_prop);
 	}
-	if (CorrectAtom == None || !ret_format) {
+	if (CorrectAtom == None || status != Success || !ret_format) {
 	    printf ("Could not find property %s\n", XDCCC_CORRECT_ATOM_NAME);
 	} else {
 	    printf ("Deleting property %s\n", XDCCC_CORRECT_ATOM_NAME);
@@ -766,11 +766,11 @@ RemoveSCCData(Display *dpy, Window root, int colorFlag)
     if (colorFlag != 1) {
 	MatricesAtom = ParseAtom (dpy, XDCCC_SCREENWHITEPT_ATOM_NAME, True);
 	if (MatricesAtom != None) {
-	    XGetWindowProperty (dpy, root, MatricesAtom, 0, 8192, False,
-			XA_INTEGER, &ret_atom, &ret_format, &ret_len,
+	    status = XGetWindowProperty (dpy, root, MatricesAtom, 0, 8192,
+			False, XA_INTEGER, &ret_atom, &ret_format, &ret_len,
 			&ret_after, &ret_prop);
 	}
-	if (MatricesAtom == None || !ret_format) {
+	if (MatricesAtom == None || status != Success || !ret_format) {
 	    printf ("Could not find property %s\n", XDCCC_SCREENWHITEPT_ATOM_NAME);
 	} else {
 	    printf ("Deleting property %s\n", XDCCC_SCREENWHITEPT_ATOM_NAME);
@@ -780,11 +780,11 @@ RemoveSCCData(Display *dpy, Window root, int colorFlag)
 
 	CorrectAtom = XInternAtom (dpy, XDCCC_GRAY_CORRECT_ATOM_NAME, True);
 	if (CorrectAtom != None) {
-	    XGetWindowProperty (dpy, root, CorrectAtom, 0, 8192, False,
-			XA_INTEGER, &ret_atom, &ret_format, &ret_len,
+	    status = XGetWindowProperty (dpy, root, CorrectAtom, 0, 8192,
+			False, XA_INTEGER, &ret_atom, &ret_format, &ret_len,
 			&ret_after, &ret_prop);
 	}
-	if (CorrectAtom == None || !ret_format) {
+	if (CorrectAtom == None || status != Success || !ret_format) {
 	    printf ("Could not find property %s\n", XDCCC_GRAY_CORRECT_ATOM_NAME);
 	} else {
 	    printf ("Deleting property %s\n", XDCCC_GRAY_CORRECT_ATOM_NAME);
