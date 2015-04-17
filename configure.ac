@@ -24,7 +24,7 @@ dnl Process this file with autoconf to create configure.
 # Initialize Autoconf
 AC_PREREQ([2.60])
 AC_INIT([xcmsdb],
-	[1.0.4],
+	[1.0.5],
 	[https://bugs.freedesktop.org/enter_bug.cgi?product=xorg],
 	[xcmsdb])
 AC_CONFIG_HEADERS([config.h])
